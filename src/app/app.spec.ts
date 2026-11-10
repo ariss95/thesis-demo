@@ -17,7 +17,7 @@ describe('App', () => {
   it('renders one page heading', () => {
     const headings = compiled.querySelectorAll('h1');
     expect(headings.length).toBe(1);
-    expect(headings[0].textContent).toContain('anomalies in compressed video');
+    expect(headings[0].textContent).toContain('Video Anomaly Detection');
   });
 
   it('has header, main and footer landmarks', () => {
