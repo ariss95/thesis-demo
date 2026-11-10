@@ -1,0 +1,141 @@
+<section aria-labelledby="results-heading">
+  <h2 id="results-heading">Results</h2>
+  <p class="intro">
+    Trained and tested on {{ dataset.name }}: {{ dataset.videos | number }} videos of
+    {{ dataset.framesPerVideo }} frames, downscaled to {{ dataset.frameSizePx }}×{{
+      dataset.frameSizePx
+    }}
+    pixels.
+  </p>
+
+  <dl class="stats">
+    <div>
+      <dt>Mean reconstruction PSNR</dt>
+      <dd class="value">{{ best.psnrDb }} dB</dd>
+      <dd class="context">at {{ best.compressionPercent }}% compression</dd>
+    </div>
+    <div>
+      <dt>Detection precision</dt>
+      <dd class="value">{{ headline.precision }}</dd>
+      <dd class="context">at a {{ headline.thresholdDb }} dB threshold</dd>
+    </div>
+    <div>
+      <dt>Detection recall</dt>
+      <dd class="value">{{ headline.recall }}</dd>
+      <dd class="context">at a {{ headline.thresholdDb }} dB threshold</dd>
+    </div>
+  </dl>
+
+  <h3>Reconstruction</h3>
+  <figure>
+    <div class="pair">
+      <img
+        ngSrc="figures/reconstruction-50pct-a.png"
+        width="700"
+        height="700"
+        alt="Four original moving MNIST frames (top row) and their reconstructions (bottom row), which look almost identical"
+      />
+      <img
+        ngSrc="figures/reconstruction-50pct-b.png"
+        width="700"
+        height="700"
+        alt="Four frames from a second video (top row) and their reconstructions (bottom row), which look almost identical"
+      />
+    </div>
+    <figcaption>
+      Original frames (top) and reconstructions (bottom) from two test videos, at
+      {{ best.compressionPercent }}% compression with {{ best.hiddenLayers }} hidden layers, a
+      {{ best.dictionaryAtoms }}-atom dictionary and A divided by {{ best.sensingMatrixDivisor }}.
+      Mean PSNR {{ best.psnrDb }} dB; above {{ goodPsnrDb }} dB counts as good.
+    </figcaption>
+  </figure>
+  <p>
+    More hidden layers gave better reconstructions (at {{ byLayers.compressionPercent }}%
+    compression):
+    @for (result of byLayers.results; track result.hiddenLayers; let last = $last) {
+      {{ result.hiddenLayers }} layers → {{ result.psnrDb | number: '1.2-2' }} dB{{
+        last ? '.' : ','
+      }}
+    }
+  </p>
+
+  <h3>Anomaly detection</h3>
+  <p>
+    The network is trained only on normal videos. A frame is flagged as anomalous when its
+    reconstruction PSNR falls below a threshold. The anomalies are synthetic: in some test videos,
+    blocks of background pixels in one random frame were painted white.
+  </p>
+  <figure>
+    <div class="pair">
+      <img
+        ngSrc="figures/anomaly-original-frame.png"
+        width="640"
+        height="480"
+        alt="A 16×16 moving MNIST frame showing one handwritten digit on a black background"
+      />
+      <img
+        ngSrc="figures/anomaly-corrupted-frame.png"
+        width="640"
+        height="480"
+        alt="The same frame with a square block of background pixels painted white"
+      />
+    </div>
+    <figcaption>
+      A test frame before (left) and after (right) adding a synthetic anomaly.
+    </figcaption>
+  </figure>
+
+  <table>
+    <caption>
+      Detection with compression, for each PSNR threshold
+    </caption>
+    <thead>
+      <tr>
+        <th scope="col">Threshold</th>
+        <th scope="col">Precision</th>
+        <th scope="col">Recall</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (row of detection; track row.thresholdDb) {
+        <tr [class.headline]="row.thresholdDb === headline.thresholdDb">
+          <th scope="row">{{ row.thresholdDb }} dB</th>
+          <td>{{ row.precision | number: '1.1-3' }}</td>
+          <td>{{ row.recall | number: '1.1-3' }}</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+  <p>
+    At {{ headline.thresholdDb }} dB: {{ confusion.truePositives | number }} true positives,
+    {{ confusion.falsePositives | number }} false positives,
+    {{ confusion.falseNegatives | number }} false negatives and
+    {{ confusion.trueNegatives | number }} true negatives.
+  </p>
+
+  <h3>Without compression, detection fails</h3>
+  <p>
+    Without compression, the network reconstructed even the anomalous frames well, so their PSNR
+    stayed high and they were not flagged. At {{ withoutCompression.thresholdDb }} dB, recall was
+    only {{ withoutCompression.recall }}. Compression is what makes the method work.
+  </p>
+  <figure>
+    <div class="pair">
+      <img
+        ngSrc="figures/no-compression-input.png"
+        width="640"
+        height="480"
+        alt="An anomalous frame: two digits and a white block in the top-left corner"
+      />
+      <img
+        ngSrc="figures/no-compression-reconstruction.png"
+        width="640"
+        height="480"
+        alt="Its reconstruction without compression, which keeps the white block almost unchanged"
+      />
+    </div>
+    <figcaption>
+      An anomalous input frame (left) and its reconstruction without compression (right).
+    </figcaption>
+  </figure>
+</section>
