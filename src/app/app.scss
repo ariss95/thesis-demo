@@ -58,6 +58,10 @@ main {
   &:focus {
     outline: none;
   }
+
+  > * + * {
+    margin-top: 4rem;
+  }
 }
 
 .site-footer {
