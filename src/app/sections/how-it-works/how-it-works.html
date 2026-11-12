@@ -1,0 +1,21 @@
+<section aria-labelledby="how-it-works-heading">
+  <h2 id="how-it-works-heading">How it works</h2>
+  <p>
+    The steps of a proximal gradient method for ℓ1–ℓ1 minimization become the layers of a recurrent
+    network. It reconstructs compressively sensed video frames using the similarity between
+    consecutive frames.
+  </p>
+  <figure>
+    <img
+      ngSrc="figures/unfolded-rnn-vs-rnn.png"
+      width="375"
+      height="868"
+      priority
+      alt="Two network diagrams. (a) A stacked RNN: each input frame s is compressed by A into x, passes up through K hidden layers to the reconstructed frame ŝ, and each hidden layer links to the same layer at the next time step. (b) The proposed model, with the same inputs and outputs: only the last hidden layer of each time step links to the next time step, where it feeds the hidden layers."
+    />
+    <figcaption>
+      (a) A stacked RNN. (b) The proposed deep-unfolded model: each hidden layer is one iteration of
+      the proximal gradient method.
+    </figcaption>
+  </figure>
+</section>

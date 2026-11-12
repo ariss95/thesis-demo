@@ -26,6 +26,11 @@ describe('App', () => {
     expect(compiled.querySelector('footer')).not.toBeNull();
   });
 
+  it('renders the sections in page order', () => {
+    const sections = [...compiled.querySelectorAll('main > *')].map((el) => el.tagName);
+    expect(sections).toEqual(['APP-PROBLEM', 'APP-HOW-IT-WORKS', 'APP-RESULTS']);
+  });
+
   it('has a skip link that points to the main content', () => {
     const skipLink = compiled.querySelector<HTMLAnchorElement>('a.skip-link');
     const target = skipLink?.getAttribute('href')?.slice(1);
