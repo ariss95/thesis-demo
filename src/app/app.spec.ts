@@ -20,6 +20,11 @@ describe('App', () => {
     expect(headings[0].textContent).toContain('Video Anomaly Detection');
   });
 
+  it('names the author in the hero and the footer', () => {
+    expect(compiled.querySelector('header .byline')?.textContent).toContain('Aris Siozios');
+    expect(compiled.querySelector('footer')?.textContent).toContain('by Aris Siozios');
+  });
+
   it('has header, main and footer landmarks', () => {
     expect(compiled.querySelector('header')).not.toBeNull();
     expect(compiled.querySelector('main')).not.toBeNull();

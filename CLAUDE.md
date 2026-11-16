@@ -86,6 +86,7 @@ A task is finished only when the change builds, the relevant tests pass and lint
 
 Source: the thesis PDF (University of Ioannina, Sept 2021, advisor Prof. Lisimachos P. Kondi).
 
+- **Author:** Aris Siozios (Greek: Σιώζιος Άρης).
 - **Idea:** a recurrent neural network built with deep unfolding. The steps of a proximal gradient method for an l1-l1 problem become the network's layers. It reconstructs video frames captured with compressed sensing, using the similarity between consecutive frames.
 - **Anomaly detection:** train only on normal videos. A frame counts as anomalous when its reconstruction quality (PSNR) falls below a threshold.
 - **Data:** moving MNIST (10,000 videos, 20 frames each, downscaled to 16×16; split 8,000 / 1,000 / 1,000). Anomalies were **synthetic**: in some test videos, one random frame had blocks of background pixels painted white.
